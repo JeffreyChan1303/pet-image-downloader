@@ -33,16 +33,51 @@ function App() {
     console.log(selectedPets);
   }
 
+  const downloadSelectedPets = () => {
+    selectedPets.forEach(async (curPet) => {
+      try {
+        const response = await fetch(curPet.url);
+        const blob = await response.blob();
+
+        // Create a download link
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${curPet.title}.jpg`;
+
+        // Append the link to the body
+        document.body.appendChild(link);
+
+        // Trigger the download
+        link.click();
+
+        // Remove the link from the body
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error('Error downloading image:', (error as Error).message);
+      }
+    });
+  };
+
   return (
     <>
       <h1>Pet Image Downloader</h1>
       <h4>Choose the images that you wish to download!</h4>
 
-      <button onClick={() => setSelectedPets(allPets)}>Select All</button>
-      <button>Clear Selection</button>
+      <div
+        className="actions-bar"
+        style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '2rem' }}
+      >
+        <button onClick={() => setSelectedPets(allPets)}>Select All</button>
+        <button onClick={() => setSelectedPets([])}>Clear Selection</button>
+        <button onClick={() => downloadSelectedPets()}>Download Selection</button>
+      </div>
       <div className="card-selection">
         {allPets.map((pet) => (
-          <PetCard pet={pet} onClick={() => selectDeselectPet(pet)} />
+          <PetCard
+            pet={pet}
+            onClick={() => selectDeselectPet(pet)}
+            isSelected={selectedPets.indexOf(pet) > -1}
+          />
         ))}
       </div>
     </>

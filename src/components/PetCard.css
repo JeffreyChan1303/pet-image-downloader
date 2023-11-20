@@ -4,12 +4,13 @@
   border: solid 2px white;
   max-width: 20rem;
   cursor: pointer;
+  opacity: 0.85;
 }
 
 .pet-card:hover {
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .pet-card.selected {
-  color: green;
+  border-color: plum;
 }
