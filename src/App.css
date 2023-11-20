@@ -4,3 +4,10 @@
   padding: 2rem;
   text-align: center;
 }
+
+.card-selection {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}

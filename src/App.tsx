@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import PetCard from './components/PetCard';
+import type { PetProps } from './types';
 
-type petProps = Array<{
-  title: string;
-  description: string;
-  created: string;
-  url: string;
-}>;
+type PetsProps = Array<PetProps>;
 
 function App() {
-  const [pets, setPets] = useState<petProps>([]);
+  const [allPets, setAllPets] = useState<PetsProps>([]);
+  const [selectedPets, setSelectedPets] = useState<PetsProps>([]);
 
   useEffect(() => {
     getPets();
@@ -19,22 +17,34 @@ function App() {
     try {
       const response = await fetch('https://eulerity-hackathon.appspot.com/pets');
       const data = await response.json();
-      setPets(data);
+      setAllPets(data);
       console.log(data);
     } catch (e) {
       console.log(e);
     }
   }
+
+  function selectDeselectPet(pet: PetProps) {
+    if (selectedPets.find((curPet) => curPet.url === pet.url)) {
+      setSelectedPets(selectedPets.filter((curPet) => curPet.url !== pet.url));
+    } else {
+      setSelectedPets([...selectedPets, pet]);
+    }
+    console.log(selectedPets);
+  }
+
   return (
     <>
-      {pets.map((pet) => (
-        <div>
-          <h3>{pet.title}</h3>
-          <h4>{pet.description}</h4>
-          <p>{pet.created}</p>
-          <img width="200" src={pet.url} />
-        </div>
-      ))}
+      <h1>Pet Image Downloader</h1>
+      <h4>Choose the images that you wish to download!</h4>
+
+      <button onClick={() => setSelectedPets(allPets)}>Select All</button>
+      <button>Clear Selection</button>
+      <div className="card-selection">
+        {allPets.map((pet) => (
+          <PetCard pet={pet} onClick={() => selectDeselectPet(pet)} />
+        ))}
+      </div>
     </>
   );
 }

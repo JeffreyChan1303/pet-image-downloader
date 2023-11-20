@@ -1,0 +1,15 @@
+.pet-card {
+  padding: 1rem;
+  border-radius: 1rem;
+  border: solid 2px white;
+  max-width: 20rem;
+  cursor: pointer;
+}
+
+.pet-card:hover {
+  opacity: 0.5;
+}
+
+.pet-card.selected {
+  color: green;
+}
