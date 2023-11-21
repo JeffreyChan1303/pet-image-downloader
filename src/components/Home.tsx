@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './Home.css';
 import PetCard from './PetCard';
 import type { PetProps } from '../types';
+import UseFetch from '../utils/UseFetch';
 
 type PetsProps = Array<PetProps>;
 
@@ -12,24 +13,10 @@ enum SortByValue {
 }
 
 const Home = () => {
-  const [allPets, setAllPets] = useState<PetsProps>([]);
+  const { data: allPets } = UseFetch<PetsProps>('https://eulerity-hackathon.appspot.com/pets');
   const [selectedPets, setSelectedPets] = useState<PetsProps>([]);
   const [search, setSearch] = useState('');
   const [sortByValue, setSortByValue] = useState<SortByValue>(SortByValue.None);
-
-  useEffect(() => {
-    getPets();
-  }, []);
-
-  async function getPets() {
-    try {
-      const response = await fetch('https://eulerity-hackathon.appspot.com/pets');
-      const data = await response.json();
-      setAllPets(data);
-    } catch (e) {
-      console.log(e);
-    }
-  }
 
   function selectDeselectPet(pet: PetProps) {
     if (selectedPets.find((curPet) => curPet.url === pet.url)) {
@@ -70,7 +57,7 @@ const Home = () => {
       <h4>Choose the images that you wish to download!</h4>
 
       <div className="actions-bar">
-        <button onClick={() => setSelectedPets(allPets)}>Select All</button>
+        <button onClick={() => setSelectedPets(allPets || [])}>Select All</button>
         <button onClick={() => setSelectedPets([])}>Clear Selection</button>
         <button onClick={() => downloadSelectedPets()}>Download Selection</button>
         <select value={sortByValue} onChange={(e) => setSortByValue(parseInt(e.target.value))}>
@@ -86,7 +73,7 @@ const Home = () => {
       <div className="card-selection">
         {/* filter, sort, and map pets depending on app state */}
         {allPets
-          .filter(
+          ?.filter(
             (curPet) =>
               curPet.title.toLowerCase().includes(search.toLowerCase()) ||
               curPet.description.toLowerCase().includes(search.toLowerCase())
