@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import './Home.css';
 import PetCard from './PetCard';
 import type { PetProps } from '../types';
 import UseFetch from '../utils/UseFetch';
+import styled from 'styled-components';
 
 type PetsProps = Array<PetProps>;
 
@@ -11,6 +11,52 @@ enum SortByValue {
   Alphabetically,
   ReverseAlphabetically,
 }
+
+const ActionsBarStyled = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+`;
+
+const SearchWrapperStyled = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const CardSelectionStyled = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+const LabelStyled = styled.label`
+  align-self: center;
+  font-weight: 500;
+  font-size: 1.25rem;
+`;
+
+const ButtonStyled = styled.button`
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  &:hover {
+    border-color: plum;
+  }
+  &:focus,
+  &:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+`;
 
 const Home = () => {
   const { data: allPets } = UseFetch<PetsProps>('https://eulerity-hackathon.appspot.com/pets');
@@ -56,21 +102,21 @@ const Home = () => {
       <h1>Pet Image Downloader</h1>
       <h4>Choose the images that you wish to download!</h4>
 
-      <div className="actions-bar">
-        <button onClick={() => setSelectedPets(allPets || [])}>Select All</button>
-        <button onClick={() => setSelectedPets([])}>Clear Selection</button>
-        <button onClick={() => downloadSelectedPets()}>Download Selection</button>
+      <ActionsBarStyled>
+        <ButtonStyled onClick={() => setSelectedPets(allPets || [])}>Select All</ButtonStyled>
+        <ButtonStyled onClick={() => setSelectedPets([])}>Clear Selection</ButtonStyled>
+        <ButtonStyled onClick={() => downloadSelectedPets()}>Download Selection</ButtonStyled>
         <select value={sortByValue} onChange={(e) => setSortByValue(parseInt(e.target.value))}>
           <option value={SortByValue.None}>No Sorting</option>
           <option value={SortByValue.Alphabetically}>Sort By A-Z</option>
           <option value={SortByValue.ReverseAlphabetically}>Sort By Z-A</option>
         </select>
-        <div className="search-wrapper">
-          <label htmlFor="search">Search: </label>
+        <SearchWrapperStyled>
+          <LabelStyled htmlFor="search">Search: </LabelStyled>
           <input name="search" type="text" onChange={(e) => setSearch(e.target.value.trim())} />
-        </div>
-      </div>
-      <div className="card-selection">
+        </SearchWrapperStyled>
+      </ActionsBarStyled>
+      <CardSelectionStyled>
         {/* filter, sort, and map pets depending on app state */}
         {allPets
           ?.filter(
@@ -91,9 +137,10 @@ const Home = () => {
               pet={pet}
               onClick={() => selectDeselectPet(pet)}
               isSelected={selectedPets.indexOf(pet) > -1}
+              key={pet.url}
             />
           ))}
-      </div>
+      </CardSelectionStyled>
     </>
   );
 };
