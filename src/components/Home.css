@@ -1,0 +1,25 @@
+.card-selection {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.actions-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+label {
+  align-self: center;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
