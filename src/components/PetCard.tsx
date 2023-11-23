@@ -9,6 +9,7 @@ type PetCardProps = {
 };
 
 const PetCardStyled = styled.div`
+  // position: relative;
   padding: 1rem;
   border-radius: 1rem;
   border: solid 2px white;
@@ -23,12 +24,18 @@ const PetCardStyled = styled.div`
   }
 `;
 
+const StyledImage = styled.img`
+  max-width: 100%;
+  max-height: 200px;
+  // object-fit: contain;
+`;
+
 const PetCard: React.FC<PetCardProps> = ({ pet, onClick, isSelected }) => {
   return (
     <PetCardStyled className={isSelected ? 'selected' : ''} onClick={onClick}>
       <h3>Title: {pet.title}</h3>
       <h4>Details: {pet.description}</h4>
-      <img className="pet-image" height="200" src={pet.url} />
+      <StyledImage className="pet-image" src={pet.url} />
       <p>Created Date: {pet.created}</p>
     </PetCardStyled>
   );
