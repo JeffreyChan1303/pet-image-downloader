@@ -35,7 +35,12 @@ const PetCard: React.FC<PetCardProps> = ({ pet, onClick, isSelected }) => {
     <PetCardStyled className={isSelected ? 'selected' : ''} onClick={onClick}>
       <h3>Title: {pet.title}</h3>
       <h4>Details: {pet.description}</h4>
-      <StyledImage className="pet-image" src={pet.url} />
+      <StyledImage
+        className="pet-image"
+        src={pet.url}
+        alt={`Pet Image: ${pet.title}`}
+        loading="lazy"
+      />
       <p>Created Date: {pet.created}</p>
     </PetCardStyled>
   );
