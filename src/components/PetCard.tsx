@@ -19,7 +19,7 @@ const PetCardStyled = styled.div`
     opacity: 1;
   }
   &.selected {
-    border-color: plum;
+    border-color: #646cff;
   }
 `;
 

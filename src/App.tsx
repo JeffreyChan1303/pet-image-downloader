@@ -4,10 +4,10 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Link,
   Outlet,
   RouterProvider,
 } from 'react-router-dom';
+import Navbar from './components/Navbar';
 
 function App() {
   const router = createBrowserRouter(
@@ -19,7 +19,7 @@ function App() {
     )
   );
   return (
-    <div className="app">
+    <div id="app">
       <RouterProvider router={router} />
     </div>
   );
@@ -28,10 +28,7 @@ function App() {
 const Root = () => {
   return (
     <>
-      <div>
-        <Link to="/">Home</Link>
-        <Link to="about-me">About Me</Link>
-      </div>
+      <Navbar />
 
       <div>
         <Outlet />
