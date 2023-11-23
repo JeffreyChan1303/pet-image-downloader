@@ -75,6 +75,14 @@ const Home = () => {
     }
   }
 
+  const handleDownloadClick = () => {
+    if (selectedPets.length == 0) {
+      alert('please select an image');
+    } else {
+      downloadSelectedPets(selectedPets);
+    }
+  };
+
   return (
     <>
       <h1>Pet Image Downloader</h1>
@@ -87,9 +95,7 @@ const Home = () => {
           <ActionsBarStyled>
             <ButtonStyled onClick={() => setSelectedPets(allPets || [])}>Select All</ButtonStyled>
             <ButtonStyled onClick={() => setSelectedPets([])}>Clear Selection</ButtonStyled>
-            <ButtonStyled onClick={() => downloadSelectedPets(selectedPets)}>
-              Download Selection
-            </ButtonStyled>
+            <ButtonStyled onClick={handleDownloadClick}>Download Selection</ButtonStyled>
             <select value={sortByValue} onChange={(e) => setSortByValue(parseInt(e.target.value))}>
               <option value={SortByValue.None}>No Sorting</option>
               <option value={SortByValue.Alphabetically}>Sort By A-Z</option>

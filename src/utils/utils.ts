@@ -1,26 +1,26 @@
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 import type { PetProps } from '../types';
 
-export const downloadSelectedPets = (selectedPets: Array<PetProps>) => {
-  selectedPets.forEach(async (curPet) => {
-    try {
-      const response = await fetch(curPet.url);
-      const blob = await response.blob();
+export const downloadSelectedPets = async (selectedPets: Array<PetProps>) => {
+  try {
+    const zip = JSZip();
 
-      // Create a download link
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.download = `${curPet.title}.jpg`;
+    // wait for all images to be in the zip file
+    await Promise.all(
+      selectedPets.map(async (pet) => {
+        const response = await fetch(pet.url);
+        const blob = await response.blob();
+        zip.file(`${pet.title}.jpg`, blob);
+      })
+    );
 
-      // Append the link to the body
-      document.body.appendChild(link);
+    // Generate the zip file asynchronously
+    const content = await zip.generateAsync({ type: 'blob' });
 
-      // Trigger the download
-      link.click();
-
-      // Remove the link from the body
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error('Error downloading image:', (error as Error).message);
-    }
-  });
+    // Save the zip file
+    saveAs(content, 'selectedPets.zip');
+  } catch (error) {
+    console.error('Error downloading images:', (error as Error).message);
+  }
 };
